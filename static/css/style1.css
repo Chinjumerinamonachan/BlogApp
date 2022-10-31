@@ -1,0 +1,13 @@
+.nav_inline > li{
+    display: inline-block;
+
+}
+
+.div_inline{
+    float: right;
+    width: min-content;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}

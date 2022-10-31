@@ -1,0 +1,30 @@
+{%  extends "base.html" %}
+{% load static %}
+{% block content %}
+<section>
+    <a href="{% url 'myblog:home'  %}"class="btn btn-info">Back</a>
+                  
+                  
+                
+<h2 class="row justify-content-center">Login Page</h2>
+</br>
+
+
+   
+    <div class="form">
+    <form action="" method="post" >
+
+        {% csrf_token %} 
+        {{form.as_p}}
+       
+        
+        <button class="btn btn-primary"> Login</button>
+        </form>
+        <p><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+        
+        </div>
+</div>
+</section> 
+
+
+{% endblock %}

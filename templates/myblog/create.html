@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block content %}
+
+
+<a href="{% url 'myblog:home'  %}"class="btn btn-info">Back</a>
+
+
+<div class="container" style="max-width: 600px">
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Article | <span class="text-primary h4">ADD</span></h1>
+  </div>
+  <div class="py-5">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-body">
+             
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %} 
+          {% if info %}
+          <p class="text-primary">{{info}}</p>
+          {% endif %} {{ form.as_p }}
+          <input type="submit" value="Submit">
+        </form>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
