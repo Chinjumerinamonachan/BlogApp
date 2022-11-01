@@ -6,15 +6,16 @@ from django.contrib.auth import get_user_model
 USER = get_user_model()
 
 def home_view(request):
+    articles=Article.objects.filter(status=1).order_by('-created_on')
+    context={"articles":articles}
     template_name="myblog/index.html"
-    return render(request,template_name)
+    return render(request,template_name,context)
 
 def list_view(request):
-    # current_user=request.USER
-    # print("userrrrrrr: ",current_user)
-    # articles=Article.objects.filter(status=1,author=current_user).order_by('-created_on')
-    articles=Article.objects.filter(status=1).order_by('-created_on')
-    # template_name="myblog/index.html"
+    user = USER.objects.get(username=request.user.username)
+    print("//////",user)
+    articles=Article.objects.filter(status=1,author=user).order_by('-created_on')
+    
     template_name="myblog/list.html"
     context={"articles":articles}
     return render(request,template_name,context)
