@@ -22,4 +22,19 @@
   </div>
 </div>
 
+<!-- {% if user.is_authenticated %} -->
+  <!-- <form action="{% url 'like_post'  %}" method="POST">
+    {% csrf_token %}
+
+    {% if is_liked %}
+    <button type="submit" name="article_id" value="{{article.id}}" class="btn btn-primary">Unlike</button>
+    {% else %}
+    <button type="submit" name="article_id" value="{{article.id}}" class="btn btn-primary">Like</button>
+    {% endif %}
+  </form> -->
+<!-- {% else %}
+  <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
+{% endif %}
+<strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong> -->
+
 {% endblock %}

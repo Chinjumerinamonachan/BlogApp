@@ -10,7 +10,9 @@ urlpatterns = [
     path("list",views.list_view,name="list"),
     # path('<slug:slug>/',views.detail_view,name="detail"),
     path("<int:aid>/",views.detail_view,name="detail"),
-    path("create",views.create_view,name="create")
+    path("create",views.create_view,name="create"),
+    path('like/',views.like_post,name="like-post")
+
     
     
 ]
