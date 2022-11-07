@@ -11,30 +11,49 @@
           <p class="card-text">{{ articles.author }} | {{ articles.created_on }}</p>
           <p class="card-text">{{ articles.content | safe }}</p>
           <p class="card-text text-muted fst-italic"> 
-            <!-- Last Updated on: {{articl.updated_on|date}}
+            
+        <form action="{% url 'myblog:like-post' %}" method="post"class="btn">
+          {% csrf_token %}
+          <input type="hidden" name="article_id" value="{{ articles.id }}">
+          {% if user not in articles.likes.all %}
+            <button class="ui button positive" type="submit">Like</button>
+          {% else %}
+            <button class="ui button negative" type="submit">UnLike</button>
+          {% endif %}
+         </form>
+         
+
+        <strong>{{ articles.likes.all.count }} Likes</strong>
+
+        {% for comment in comments %}
+          <div class="comment">
+          <p class="info">
+              Comment {{ forloop.counter }} by {{ comment.name }}
+              {{ comment.created }}
           </p>
-         <h1>{% block title %} {{ articles.title }} {% endblock title %}</h1>
-        <p class=" text-muted">{{ articles.author }} | {{ articles.created_on }}</p>
-        <p class="card-text ">{{ articles.content | safe }}</p> -->
+              {{ comment.body|linebreaks }}
+          </div>
+        {% empty %}
+          <p>There are no comments yet.</p>
+        {% endfor %}
+
+        {% if new_comment %}
+          <h2>Your comment has been added.</h2>
+        {% else %}
+          <h2>Add a new comment</h2>
+          <form action="." method="post">
+          {{ comment_form.as_p }}
+          {% csrf_token %}
+          <p><input type="submit" value="Add comment"></p>
+          </form>
+        {% endif %}
+        
       </div>
     </div>
   
   </div>
 </div>
 
-<!-- {% if user.is_authenticated %} -->
-  <!-- <form action="{% url 'like_post'  %}" method="POST">
-    {% csrf_token %}
 
-    {% if is_liked %}
-    <button type="submit" name="article_id" value="{{article.id}}" class="btn btn-primary">Unlike</button>
-    {% else %}
-    <button type="submit" name="article_id" value="{{article.id}}" class="btn btn-primary">Like</button>
-    {% endif %}
-  </form> -->
-<!-- {% else %}
-  <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
-{% endif %}
-<strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong> -->
 
 {% endblock %}

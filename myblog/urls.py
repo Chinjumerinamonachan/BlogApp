@@ -11,7 +11,8 @@ urlpatterns = [
     # path('<slug:slug>/',views.detail_view,name="detail"),
     path("<int:aid>/",views.detail_view,name="detail"),
     path("create",views.create_view,name="create"),
-    path('like/',views.like_post,name="like-post")
+    # path('like/',views.user_like_post,name="user_like_post"),
+    path('like/',views.like_post,name="like-post"),
 
     
     

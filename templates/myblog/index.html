@@ -114,21 +114,13 @@
                     <h2 class="card-title">{{ article.title }}</h2>
                     <p class="card-text text-muted h6">{{ article.author }} | {{ article.created_on}} </p>
                     <p class="card-text">{{article.content|slice:":200" }}</p>
-                    <a href="{% url 'myblog:detail' article.id %}" class="btn btn-primary">Read More &rarr;</a>
-                  {% if user.is_authenticated %}
-                <form action="{% url 'myblog:like-post' %}" method="post"class="btn">
-                  {% csrf_token %}
-                  <input type="hidden" name="article_id" value="{{ article.id }}">
-                  {% if user not in article.likes.all %}
-                    <button class="ui button positive" type="submit">Like</button>
-                  {% else %}
-                    <button class="ui button negative" type="submit">UnLike</button>
-                  {% endif %}
-                  {% else %}
-                  <a class="btn btn-outline-info" href="{% url 'login' %}?next={% url 'myblog:like-post' %}">Like</a><br>
-                  {% endif %}
-                  <strong>{{ article.likes.all.count }} Likes</strong>
-
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'myblog:detail'  article.id  %}" class="btn btn-primary">Read More &rarr;</a>
+                    
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'myblog:detail'  article.id  %}" class="btn btn-primary">Read More &rarr;</a>
+                    {% endif %}
+                    <strong>{{ article.likes.all.count }} Likes</strong>
                 </form>
               </div>
             </div>
