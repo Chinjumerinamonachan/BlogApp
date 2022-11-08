@@ -13,6 +13,7 @@ urlpatterns = [
     path("create",views.create_view,name="create"),
     # path('like/',views.user_like_post,name="user_like_post"),
     path('like/',views.like_post,name="like-post"),
+    path('contact',views.contact_view,name="contact"),
 
     
     

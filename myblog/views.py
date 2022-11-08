@@ -1,9 +1,10 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from myblog.models import Article,Like,Comment
-from myblog.forms import ArticleForm,CommentForm
+from myblog.forms import ArticleForm,CommentForm,ContactForm
 
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+
 
 USER = get_user_model()
 
@@ -47,9 +48,10 @@ def detail_view(request,aid):
             # Save the comment to the database
             new_comment.save()
     else:
-        comment_form = CommentForm()  
+        comment_form = CommentForm() 
+     
     
-   
+    
     template_name="myblog/detail.html"
     context={
         "articles":articles,
@@ -59,6 +61,7 @@ def detail_view(request,aid):
     
     }
     return render(request,template_name,context)
+    
 
 def like_post(request):
    
@@ -97,6 +100,26 @@ def create_view(request):
           
     context['form']= form
     return render(request, "myblog/create.html", context)
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+def contact_view(request):
+    form=ContactForm()
+    # if request.method == 'POST':
+    #     form=ContactForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('myblog:contact')
+    if form.is_ajax():
+        form=ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({
+                'msg':'Success'
+            })
+    return render(request,'myblog/contact.html',{'form':form})
+
 
 
 
