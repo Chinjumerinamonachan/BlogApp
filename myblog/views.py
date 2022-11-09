@@ -89,9 +89,7 @@ def like_post(request):
     # like.save()
 
     # # return redirect('myblog:detail', kwargs={'article_id': article_id})
-    # return JsonResponse({
-    #             'msg':'Success'
-    #         })
+    # return redirect('myblog:list')
 
     if is_ajax(request):
         article_id=request.POST.get('article_id')
