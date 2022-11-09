@@ -16,29 +16,7 @@
 </script>
 
 
-<script>
-    const form=document.getElementById('form');
-     form.addEventListener("submit",submitHandler);
-    
-  
-     function submitHandler(e){
-      e.preventDefault();
-      $.ajax({
-            type:'POST',
-            url:"{% url 'myblog:contact' %}",
-            data:$("#form").serialize(),
-            dataType:'json',
-            success:function(data){ 
-            if(data.msg=== 'Success'){
-                form.reset(); 
-                alert('Form is submitted.')
-          }
-       }
-  
-    }) 
-  
-    }
-  </script>
+
 
 <div class="container" style="max-width: 600px">
   <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -60,6 +38,30 @@
     </div>
     </div>
     </div>
+    
+    <script>
+      const form=document.getElementById('form');
+       form.addEventListener("submit",submitHandler);
+      
+    
+       function submitHandler(e){
+        e.preventDefault();
+        $.ajax({
+              type:'POST',
+              url:"{% url 'myblog:contact' %}",
+              data:$("#form").serialize(),
+              dataType:'json',
+              success:function(data){ 
+              if(data.msg === 'Success'){
+                  form.reset(); 
+                  alert('Form is submitted.')
+            }
+         }
+    
+      }) 
+    
+      }
+    </script>
 </body>
 </html>
 

@@ -12,7 +12,9 @@
 </head>
 <body>
 
-
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js"integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous">
+  </script>
+  
 
 
 
@@ -28,13 +30,13 @@
             <p class="card-text">{{ articles.content | safe }}</p>
             <p class="card-text text-muted fst-italic"> 
               
-          <form action="{% url 'myblog:like-post' %}" method="post"class="btn">
+          <form action="{% url 'myblog:like-post' %}" method="post"class="btn" id="form">
             {% csrf_token %}
-            <input type="hidden" name="article_id" value="{{ articles.id }}">
+            <!-- <input type="hidden" name="article_id" value="{{ articles.id }}" > -->
             {% if user not in articles.likes.all %}
-              <button class="ui button positive" type="submit">Like</button>
+              <button  type="submit"  class="like" value="{{ articles.id }}" name="article_id" >Like</button>
             {% else %}
-              <button class="ui button negative" type="submit">UnLike</button>
+              <button  type="submit"  class="like" value="{{ articles.id }}"  name="article_id">UnLike</button>
             {% endif %}
            </form>
            
@@ -57,7 +59,7 @@
             <h2>Your comment has been added.</h2>
           {% else %}
             <h2>Add a new comment</h2>
-            <form action="." method="post" id="form">
+            <form action="." method="post" >
             {{ comment_form.as_p }}
             {% csrf_token %}
             <p><input type="submit" value="Add comment"></p>
@@ -70,12 +72,31 @@
     </div>
   </div>
   
-  
-  
+
+<script>
+  $('.like').click(function(){
+  var articleid;
+  articleid = $(this).attr("value");
+  $.ajax(
+  {
+      type:"POST",
+      url: "{% url 'myblog:list' %}",
+      data:{
+               article_id: articleid
+      },
+      success: function( data ) 
+      {
+        if(data.msg === 'Success'){
+                  
+                  alert('Form is submitted.')
+            }
+      }
+   })
+});
+</script>
+
 </body>
 </html>
-
-
 
 
 

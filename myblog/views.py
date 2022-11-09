@@ -28,6 +28,9 @@ def list_view(request):
     context={"articles":articles
     }
     return render(request,template_name,context)
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 
 def detail_view(request,aid):
     print("haiiiiiiiiii")
@@ -68,7 +71,29 @@ def like_post(request):
     user = USER.objects.get(username=request.user.username)
    
     print("...............",user)
-    if request.method=='POST':
+    # if request.method=='POST':
+    #     article_id=request.POST.get('article_id')
+    #     print("idddddddd.....",article_id)
+    #     aricle_obj=Article.objects.get(id=article_id)
+
+    #     if user in aricle_obj.likes.all():
+    #         aricle_obj.likes.remove(user)
+    #     else:
+    #         aricle_obj.likes.add(user)
+    # like,created=Like.objects.get_or_create(user=user,article_id=article_id)
+    # if not created:
+    #     if like.value=='Like':
+    #         like.value='UnLike'
+    #     else:
+    #         like.value='Like'
+    # like.save()
+
+    # # return redirect('myblog:detail', kwargs={'article_id': article_id})
+    # return JsonResponse({
+    #             'msg':'Success'
+    #         })
+
+    if is_ajax(request):
         article_id=request.POST.get('article_id')
         print("idddddddd.....",article_id)
         aricle_obj=Article.objects.get(id=article_id)
@@ -84,9 +109,9 @@ def like_post(request):
         else:
             like.value='Like'
     like.save()
-
-    # return redirect('myblog:detail', kwargs={'article_id': article_id})
-    return redirect('myblog:list')
+    return JsonResponse({
+                'msg':'Success'
+            })
 
 
 
@@ -101,8 +126,7 @@ def create_view(request):
     context['form']= form
     return render(request, "myblog/create.html", context)
 
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 
 def contact_view(request):
     form=ContactForm()
@@ -111,7 +135,7 @@ def contact_view(request):
     #     if form.is_valid():
     #         form.save()
     #         return redirect('myblog:contact')
-    if form.is_ajax():
+    if is_ajax(request):
         form=ContactForm(request.POST)
         if form.is_valid():
             form.save()
