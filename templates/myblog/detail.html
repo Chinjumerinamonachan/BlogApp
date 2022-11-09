@@ -30,9 +30,10 @@
             <p class="card-text">{{ articles.content | safe }}</p>
             <p class="card-text text-muted fst-italic"> 
               
-          <form action="{% url 'myblog:like-post' %}" method="post"class="btn" id="form">
+           <form action="{% url 'myblog:like-post' %}" method="post"class="btn like-form"> 
+          <!-- <form action="" method="post"class="btn"></form> -->
             {% csrf_token %}
-            <!-- <input type="hidden" name="article_id" value="{{ articles.id }}" > -->
+            <input type="hidden" name="article_id" value="{{ articles.id }}" >
             {% if user not in articles.likes.all %}
               <button  type="submit"  class="like" value="{{ articles.id }}" name="article_id" >Like</button>
             {% else %}
@@ -41,7 +42,7 @@
            </form>
            
   
-          <strong>{{ articles.likes.all.count }} Likes</strong>
+          <strong >{{ articles.likes.all.count }} Likes</strong>
   
           {% for comment in comments %}
             <div class="comment">
@@ -59,7 +60,7 @@
             <h2>Your comment has been added.</h2>
           {% else %}
             <h2>Add a new comment</h2>
-            <form action="." method="post" >
+            <form action="" method="post" id="form">
             {{ comment_form.as_p }}
             {% csrf_token %}
             <p><input type="submit" value="Add comment"></p>
@@ -73,31 +74,70 @@
   </div>
   
 
+
+
 <script>
-  $('.like').click(function(){
-  var articleid;
-  articleid = $(this).attr("value");
-  $.ajax(
-  {
-      type:"POST",
-      url: "{% url 'myblog:list' %}",
-      data:{
-               article_id: articleid
-      },
-      success: function( data ) 
-      {
-        if(data.msg === 'Success'){
-                  
-                  alert('Form is submitted.')
+// comment ajax_form
+const form=document.getElementById('form');
+form.addEventListener("submit",submitHandler);
+      
+    
+       function submitHandler(e){
+        e.preventDefault();
+        $.ajax({
+              type:'POST',
+              
+              data:$("#form").serialize(),
+              dataType:'json',
+              success:function(data){ 
+              if(data.msg === 'Success'){
+                form.reset(); 
+                  alert('you are commented.')
             }
+         }
+    
+      }) 
+    
       }
-   })
-});
+    
+
+$(document).ready(function(){
+
+//like ajax call
+$('.like-form').submit(function(e){
+    e.preventDefault();
+     const article_id=$('.like').val();
+     console.log(article_id);
+     const token=$('input[name=csrfmiddlewaretoken]').val();
+     const url=$(this).attr('action') 
+   $.ajax({
+       method:"POST",
+       url:url,
+       headers:{'X-CSRFToken': token},
+       data:{
+           'article_id':article_id
+       },
+       success:function(response){
+        if(data.msg === 'Success'){
+                
+                  alert('sumbission was completed.')
+            }
+      
+   }
+
+})})})
+
+
 </script>
+
+   
+
+
+
+
 
 </body>
 </html>
-
 
 
 {% endblock %}

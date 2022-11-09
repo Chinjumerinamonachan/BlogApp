@@ -28,6 +28,7 @@ def list_view(request):
     context={"articles":articles
     }
     return render(request,template_name,context)
+
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
@@ -39,8 +40,9 @@ def detail_view(request,aid):
     comments = articles.comments.filter(active=True)
 
     new_comment = None
-
-    if request.method == 'POST':
+    # comment_form=CommentForm()
+    # if request.method == 'POST':
+    if is_ajax(request):
         # A comment was posted
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -50,9 +52,12 @@ def detail_view(request,aid):
             new_comment.post = articles
             # Save the comment to the database
             new_comment.save()
+            return JsonResponse({
+                'msg':'Success'
+            })
     else:
         comment_form = CommentForm() 
-     
+        
     
     
     template_name="myblog/detail.html"
@@ -89,7 +94,9 @@ def like_post(request):
     # like.save()
 
     # # return redirect('myblog:detail', kwargs={'article_id': article_id})
-    # return redirect('myblog:list')
+    # return JsonResponse({
+    #            'msg':'Success'
+    #        })
 
     if is_ajax(request):
         article_id=request.POST.get('article_id')
