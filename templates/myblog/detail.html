@@ -42,7 +42,7 @@
            </form>
            
   
-          <strong >{{ articles.likes.all.count }} Likes</strong>
+          <strong class="like_count">{{ articles.likes.all.count }} Likes</strong>
   
           {% for comment in comments %}
             <div class="comment">
@@ -117,10 +117,11 @@ $('.like-form').submit(function(e){
        data:{
            'article_id':article_id
        },
-       success:function(response){
+       success:function(data){
         if(data.msg === 'Success'){
                 
                   alert('sumbission was completed.')
+                  
             }
       
    }
