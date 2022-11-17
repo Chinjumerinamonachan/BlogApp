@@ -126,18 +126,19 @@ $('.like-form').submit(function(e){
           const btn= document.getElementById("btn_like");
           var btn_like= document.getElementById("like-count");
            var count=response.likes_count
+           btn_like.innerText=count;
           console.log(btn);
           console.log(count);
          
 
     if(btn.innerText === "Like"){
       btn.innerText = "UnLike";
-     count=count + 1;
+    
      btn_like.innerText=count;
       }
       else{
         btn.innerText= "Like";
-        count=count - 1;
+        
         btn_like.innerText=count;
        
         }
