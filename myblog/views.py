@@ -115,7 +115,9 @@ def like_post(request):
             like.value='Like'
     like.save()
     return JsonResponse({
-                'msg':'Success'
+                'msg':'Success',
+                'article_id':article_id,
+              
             })
 
 

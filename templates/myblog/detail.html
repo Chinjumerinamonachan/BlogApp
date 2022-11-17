@@ -35,14 +35,15 @@
             {% csrf_token %}
             <input type="hidden" name="article_id" value="{{ articles.id }}" >
             {% if user not in articles.likes.all %}
-              <button  type="submit"  class="like" value="{{ articles.id }}" name="article_id" >Like</button>
+              <button  type="submit" id="btn_like" class="like" value="{{ articles.id }}" name="article_id" >Like</button>
             {% else %}
-              <button  type="submit"  class="like" value="{{ articles.id }}"  name="article_id">UnLike</button>
+              <button  type="submit" id="btn_like" class="like" value="{{ articles.id }}"  name="article_id">UnLike</button>
             {% endif %}
+            <span id="like-count"> {{ articles.likes.all.count }} likes</span>
            </form>
            
   
-          <strong class="like_count">{{ articles.likes.all.count }} Likes</strong>
+          <!-- <strong class="like_count">{{ articles.likes.all.count }} Likes</strong> -->
   
           {% for comment in comments %}
             <div class="comment">
@@ -107,9 +108,11 @@ $(document).ready(function(){
 $('.like-form').submit(function(e){
     e.preventDefault();
      const article_id=$('.like').val();
+    
      console.log(article_id);
      const token=$('input[name=csrfmiddlewaretoken]').val();
      const url=$(this).attr('action') 
+  
    $.ajax({
        method:"POST",
        url:url,
@@ -117,16 +120,40 @@ $('.like-form').submit(function(e){
        data:{
            'article_id':article_id
        },
-       success:function(data){
-        if(data.msg === 'Success'){
-                
-                  alert('sumbission was completed.')
-                  
-            }
-      
-   }
+       success:function(response){
+        console.log(response);
+         if(response.msg === 'Success'){
+          const btn= document.getElementById("btn_like");
+          let count=document.getElementById("like-count")
+          console.log(btn);
+          console.log(count);
+          
 
-})})})
+    if(btn.innerText === "Like"){
+      btn.innerText = "UnLike";
+      
+      count.innerHTML = +1;
+      }else{
+        btn.innerText= "Like";
+        
+        count.innerHTML = 0 ;
+        }
+       
+                    }
+
+                    // if (trim === 'Unlike'){
+                    //   $(selector).css("color","blue");
+                    //   res = trimCount - 1
+                    // }
+                    // else {
+                    //   $(selector).css("color","black");
+                    //   res = trimCount + 1
+                    // }
+      
+   
+  }}
+
+)})})
 
 
 </script>
