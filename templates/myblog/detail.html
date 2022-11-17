@@ -124,31 +124,27 @@ $('.like-form').submit(function(e){
         console.log(response);
          if(response.msg === 'Success'){
           const btn= document.getElementById("btn_like");
-          let count=document.getElementById("like-count")
+          var btn_like= document.getElementById("like-count");
+           var count=response.likes_count
           console.log(btn);
           console.log(count);
-          
+         
 
     if(btn.innerText === "Like"){
       btn.innerText = "UnLike";
-      
-      count.innerHTML = +1;
-      }else{
+     count=count + 1;
+     btn_like.innerText=count;
+      }
+      else{
         btn.innerText= "Like";
-        
-        count.innerHTML = 0 ;
+        count=count - 1;
+        btn_like.innerText=count;
+       
         }
        
                     }
 
-                    // if (trim === 'Unlike'){
-                    //   $(selector).css("color","blue");
-                    //   res = trimCount - 1
-                    // }
-                    // else {
-                    //   $(selector).css("color","black");
-                    //   res = trimCount + 1
-                    // }
+                   
       
    
   }}

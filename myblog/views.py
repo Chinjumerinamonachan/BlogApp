@@ -117,6 +117,7 @@ def like_post(request):
     return JsonResponse({
                 'msg':'Success',
                 'article_id':article_id,
+                  "likes_count":aricle_obj.likes.all().count()
               
             })
 
