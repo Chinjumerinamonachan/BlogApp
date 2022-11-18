@@ -46,12 +46,16 @@
           <!-- <strong class="like_count">{{ articles.likes.all.count }} Likes</strong> -->
   
           {% for comment in comments %}
-            <div class="comment">
-            <p class="info">
+            <div class="comment" id="comn">
+            <!-- <p class="info" >
                 Comment {{ forloop.counter }} by {{ comment.name }}
                 {{ comment.created }}
+
+              
             </p>
-                {{ comment.body|linebreaks }}
+            {{ comment.body|linebreaks }} -->
+            <h5 class="mt-0" id = 'commenter'>comment by {{comment.name}}</h5>
+            <p id = 'comment'>{{comment.body}}</p>
             </div>
           {% empty %}
             <p>There are no comments yet.</p>
@@ -80,21 +84,30 @@
 <script>
 // comment ajax_form
 const form=document.getElementById('form');
+let commentContainer = document.getElementById('comn')
+console.log(form)
 form.addEventListener("submit",submitHandler);
       
     
        function submitHandler(e){
         e.preventDefault();
+        let commenter = document.createElement('h5')
+        let comment = document.createElement('p')
+        commenter.classList.add('mt-0')
         $.ajax({
               type:'POST',
-              
-              data:$("#form").serialize(),
+             
+             data:$("#form").serialize(),
               dataType:'json',
               success:function(data){ 
-              if(data.msg === 'Success'){
-                form.reset(); 
-                  alert('you are commented.')
-            }
+                console.log(data);
+              commenter.innerText = data.author
+              comment.innerText = data.new_comment
+              commentContainer.appendChild(commenter)
+              commentContainer.appendChild(comment)
+              form.reset()
+
+            
          }
     
       }) 

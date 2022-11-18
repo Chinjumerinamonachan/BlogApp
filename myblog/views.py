@@ -1,10 +1,9 @@
-from django.shortcuts import render,get_object_or_404,redirect
-from myblog.models import Article,Like,Comment
-from myblog.forms import ArticleForm,CommentForm,ContactForm
-
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
+from myblog.forms import ArticleForm, CommentForm, ContactForm
+from myblog.models import Article, Comment, Like
 
 USER = get_user_model()
 
@@ -38,7 +37,7 @@ def detail_view(request,aid):
     articles=get_object_or_404(Article,pk=aid)
 
     comments = articles.comments.filter(active=True)
-
+    
     new_comment = None
     # comment_form=CommentForm()
     # if request.method == 'POST':
@@ -53,7 +52,11 @@ def detail_view(request,aid):
             # Save the comment to the database
             new_comment.save()
             return JsonResponse({
-                'msg':'Success'
+                'msg':'Success',
+                  'new_comment': new_comment.body,
+                  'author':new_comment.name,
+                  'date':new_comment.created,
+                #   'new_comment':new_comment
             })
     else:
         comment_form = CommentForm() 
