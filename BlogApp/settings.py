@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     #localapps
     "user",
     "myblog",
+    'rest_framework',
+    'blog_api',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +118,38 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+
+DEFAULT_RENDERER_CLASSES = [
+    'rest_framework.renderers.JSONRenderer',
+]
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES += [
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ],
+'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+         'rest_framework.permissions.AllowAny',
+          'rest_framework.authentication.TokenAuthentication',
+          'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+   ],
+
+}
+
+
+
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ]
+# }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

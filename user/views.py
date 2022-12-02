@@ -6,6 +6,13 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from user.forms import UserLoginForm, CustomUserRegistrationForm
 from django.contrib.auth import authenticate,login
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.response import Response
+from user.models import CustomUser
+from user.serializers import UserViewSerializer
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.parsers import JSONParser 
 
 USER = get_user_model()
 
@@ -45,6 +52,51 @@ def login_page(request):
             
     return render(request, 'registration/login.html', context={'form': form})
 
+@api_view(['GET'])
+@permission_classes([]) 
+def Userview(request):
+    print("--------------------- 1 -----------------------")
+    if request.method == 'GET':
+        print("--------------------- 2 -----------------------")
+        users = USER.objects.all()
+        print("--------------------- 3 -----------------------")
+        print(users)
+        print("--------------------- 4 -----------------------")
+        serializer = UserViewSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([]) 
+def post_Userdata(request):
+    if request.method == 'POST':
+        serializer = UserViewSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([]) 
+def post_userdetail(request,id):
+    try: 
+        user = USER.objects.get(pk=id) 
+    except USER.DoesNotExist: 
+        return Response({'message': 'The user does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+   
+ 
+    if request.method == 'PUT':
+        # user_data = JSONParser().parse(request) 
+        # print(".................",user_data)
+        serializer = UserViewSerializer(user, data=request.data) 
+        if serializer.is_valid(): 
+            serializer.save() 
+            return Response(serializer.data) 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+ 
+        
+
+      
 
 
 
