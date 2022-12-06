@@ -4,12 +4,15 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from myblog.forms import ArticleForm, CommentForm, ContactForm
 from myblog.models import Article, Comment, Like
+import json
+from django.core import serializers
+
 
 USER = get_user_model()
 
 def home_view(request):
     # user1 = USER.objects.all()
-    # user = USER.objects.get('username')
+    # user = USER.objects.get('username
     
     articles=Article.objects.filter(status=1).order_by('-created_on')
     context={"articles":articles
@@ -52,9 +55,10 @@ def detail_view(request,aid):
             # Save the comment to the database
             new_comment.save()
             return JsonResponse({
+                
                 'msg':'Success',
                   'new_comment': new_comment.body,
-                  'author':new_comment.name,
+                 
                   'date':new_comment.created,
                 #   'new_comment':new_comment
             })

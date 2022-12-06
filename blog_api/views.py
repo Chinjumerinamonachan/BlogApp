@@ -6,12 +6,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth import login,authenticate,logout
-from blog_api.serializers import ArticleSerializer, UserSerializer
+from blog_api.serializers import ArticleSerializer, UserSerializer,ArticleUpdateSerializer,ArticleListSerializer,ArticleCommentListSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import requires_csrf_token
+from django.views.decorators.csrf import csrf_protect
 USER = get_user_model()
-from myblog.models import Article
+from myblog.models import Article,Comment
 
 
 # @api_view(['POST'])
@@ -24,6 +25,8 @@ from myblog.models import Article
 #         'user_data': {user.id,
 #         user.username}
 #     })
+
+# the api for login
 @api_view(['POST'])
 @authentication_classes([]) 
 @permission_classes([]) 
@@ -52,6 +55,8 @@ def login_user(request):
             return Response({"error":"Invalid user can not login"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+#the api for logout
+
 @api_view(['GET'])
 @authentication_classes([]) 
 @permission_classes([]) 
@@ -66,25 +71,60 @@ def logout_user(request):
             logout(request,user)
             
         return Response('User Logged out successfully')
+    
+# the api for listing article
 
+@api_view(['GET'])
+@authentication_classes([]) 
+@permission_classes([]) 
+def article_list(request,id):
+    if request.method == "GET":
+        userid=USER.objects.get(pk=id)
+        print("................................",userid)
+        articles = Article.objects.filter(author=userid)
+        print(articles)
+        serializer = ArticleListSerializer(articles, many=True)
+    return Response(serializer.data)
+
+# the api for view comment 
+
+@api_view(['GET'])
+@authentication_classes([]) 
+@permission_classes([]) 
+def article_comment_and_like_list(request,id):
+    if request.method == "GET":
+        article_id=Article.objects.get(pk=id)
+        print("................................",article_id)
+        comments = Comment.objects.filter(post=article_id)
+        print(comments)
+        serializer = ArticleCommentListSerializer(comments, many=True)
+    return Response(serializer.data)
+
+# the api for article/post creation
 
 @api_view(['POST'])
-@permission_classes([])
+@authentication_classes([]) 
+@permission_classes([]) 
+# @csrf_protect
 def article_create(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         serializer = ArticleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
     return Response(serializer.data)
 
 
+#the api for article/post details
 
 @api_view(['PUT'])
+@authentication_classes([]) 
 @permission_classes([]) 
+# @csrf_protect
 def article_detail(request,id):
+
    if request.method == 'PUT':
-        user = USER.objects.get(pk=id) 
-        serializer = ArticleSerializer(user, data=request.data) 
+        article = Article.objects.get(pk=id) 
+        serializer = ArticleUpdateSerializer(article, data=request.data) 
         if serializer.is_valid(): 
             serializer.save() 
             return Response(serializer.data) 
