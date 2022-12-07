@@ -130,3 +130,14 @@ def article_detail(request,id):
             return Response(serializer.data) 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
  
+@api_view(['POST'])
+@authentication_classes([]) 
+@permission_classes([])
+def user_post_param(request):
+    if request.method =='POST':
+        username=request.data.get('username')
+        print(username)
+        return Response({"success":"the typed username is","username":username},status=status.HTTP_200_OK)
+        
+             
+        
