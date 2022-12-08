@@ -7,3 +7,4 @@ class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = USER
         fields = ["username", "password","email","first_name","last_name","date_of_birth","Phone_no"]
+

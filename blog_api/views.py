@@ -139,5 +139,31 @@ def user_post_param(request):
         print(username)
         return Response({"success":"the typed username is","username":username},status=status.HTTP_200_OK)
         
-             
+
+@api_view(['GET'])
+@authentication_classes([]) 
+@permission_classes([])
+def user_list_param(request):
+    if request.method =='GET':
+        data={}
+        username=request.data.get('username')
+        print(username)
+        check_user=USER.objects.filter(username=username).exists()
+        if check_user== False:
+            return Response({"error":"the user is not exists"})
+        user=USER.objects.get(username=username)
+      
+        data={
+                
+                "user_id":user.pk,
+                "username":user.username,
+                "email":user.email,
+                 "first_name":user.first_name,
+                  "last_name":user.last_name,
+                   "date_of_birth":user.date_of_birth,
+                   "Phone_no":user.Phone_no
+                
+        }
+        return Response({"sucess":"Typed user is","data":data}, status=status.HTTP_200_OK)
+    
         
