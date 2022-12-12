@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "myblog",
     'rest_framework',
     'blog_api',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -121,21 +121,18 @@ USE_TZ = True
 
 
 
-DEFAULT_RENDERER_CLASSES = [
-    'rest_framework.renderers.JSONRenderer',
-]
+# DEFAULT_RENDERER_CLASSES = [
+#     'rest_framework.renderers.JSONRenderer',
+# ]
 
-if DEBUG:
-    DEFAULT_RENDERER_CLASSES += [
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+# if DEBUG:
+#     DEFAULT_RENDERER_CLASSES += [
+#         'rest_framework.renderers.BrowsableAPIRenderer',
+#     ]
 REST_FRAMEWORK = {
     
-'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
-         'rest_framework.permissions.AllowAny',
+'DEFAULT_AUTHENTICATION_CLASSES': [
           'rest_framework.authentication.TokenAuthentication',
-          'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
    ],
 
 }

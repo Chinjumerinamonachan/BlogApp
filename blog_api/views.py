@@ -9,8 +9,8 @@ from django.contrib.auth import login,authenticate,logout
 from blog_api.serializers import ArticleSerializer, UserSerializer,ArticleUpdateSerializer,ArticleListSerializer,ArticleCommentListSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from django.views.decorators.csrf import requires_csrf_token
-from django.views.decorators.csrf import csrf_protect
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 USER = get_user_model()
 from myblog.models import Article,Comment
 
@@ -28,8 +28,8 @@ from myblog.models import Article,Comment
 
 # the api for login
 @api_view(['POST'])
-@authentication_classes([]) 
-@permission_classes([]) 
+# @authentication_classes([]) 
+# @permission_classes([AllowAny,]) 
 def login_user(request):
     if request.method == 'POST':
         username = request.data.get('username')
@@ -44,11 +44,12 @@ def login_user(request):
 
         if user is not None:
             login(request,user)
-            
+            token, _ = Token.objects.get_or_create(user=user)
             data={
                 
                 "user_id":request.user.pk,
-                "username":request.user.username
+                "username":request.user.username,
+                "token": token.key
         }
             return Response({"success":"successfully login","data":data}, status=status.HTTP_200_OK)
         else:
@@ -57,11 +58,11 @@ def login_user(request):
 
 #the api for logout
 
-@api_view(['GET'])
-@authentication_classes([]) 
-@permission_classes([]) 
+@api_view(['POST'])
+# @authentication_classes([]) 
+# @permission_classes([])
 def logout_user(request):
-    if request.method =='GET':
+    if request.method =='POST':
         username = request.data.get('username')
         check_user=USER.objects.filter(username=username).exists()
         if check_user== False:
@@ -76,7 +77,7 @@ def logout_user(request):
 
 @api_view(['GET'])
 @authentication_classes([]) 
-@permission_classes([]) 
+@permission_classes([])
 def article_list(request,id):
     if request.method == "GET":
         userid=USER.objects.get(pk=id)
