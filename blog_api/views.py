@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth import login,authenticate,logout
-from blog_api.serializers import ArticleSerializer, UserSerializer,ArticleUpdateSerializer,ArticleListSerializer,ArticleCommentListSerializer
+from blog_api.serializers import ArticleSerializer, UsersignupSerializer,ArticleUpdateSerializer,ArticleListSerializer,ArticleCommentListSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
@@ -76,8 +76,8 @@ def logout_user(request):
 # the api for listing article
 
 @api_view(['GET'])
-@authentication_classes([]) 
-@permission_classes([])
+# @authentication_classes([]) 
+# @permission_classes([])
 def article_list(request,id):
     if request.method == "GET":
         userid=USER.objects.get(pk=id)
@@ -90,8 +90,8 @@ def article_list(request,id):
 # the api for view comment 
 
 @api_view(['GET'])
-@authentication_classes([]) 
-@permission_classes([]) 
+# @authentication_classes([]) 
+# @permission_classes([]) 
 def article_comment_and_like_list(request,id):
     if request.method == "GET":
         article_id=Article.objects.get(pk=id)
@@ -104,8 +104,8 @@ def article_comment_and_like_list(request,id):
 # the api for article/post creation
 
 @api_view(['POST'])
-@authentication_classes([]) 
-@permission_classes([]) 
+# @authentication_classes([]) 
+# @permission_classes([]) 
 # @csrf_protect
 def article_create(request):
     if request.method == "POST":
@@ -118,8 +118,8 @@ def article_create(request):
 #the api for article/post details
 
 @api_view(['PUT'])
-@authentication_classes([]) 
-@permission_classes([]) 
+# @authentication_classes([]) 
+# @permission_classes([]) 
 # @csrf_protect
 def article_detail(request,id):
 
@@ -132,8 +132,8 @@ def article_detail(request,id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
  
 @api_view(['POST'])
-@authentication_classes([]) 
-@permission_classes([])
+# @authentication_classes([]) 
+# @permission_classes([])
 def user_post_param(request):
     if request.method =='POST':
         username=request.data.get('username')
@@ -142,8 +142,8 @@ def user_post_param(request):
         
 
 @api_view(['GET'])
-@authentication_classes([]) 
-@permission_classes([])
+# @authentication_classes([]) 
+# @permission_classes([])
 def user_list_param(request):
     if request.method =='GET':
         data={}
@@ -166,5 +166,14 @@ def user_list_param(request):
                 
         }
         return Response({"sucess":"Typed user is","data":data}, status=status.HTTP_200_OK)
-    
-        
+
+# api for signup
+
+@api_view(['POST'])
+def post_Usersignup(request):
+    if request.method == 'POST':
+        serializer = UsersignupSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+    return Response(serializer.data)
+

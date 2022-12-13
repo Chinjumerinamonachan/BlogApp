@@ -11,4 +11,5 @@ path("user/<int:id>/",views.article_list,name="list"),
 path("comment/<int:id>/",views.article_comment_and_like_list,name="comment_list"),
 path("param/list/",views.user_post_param,name="user_post_param"),
 path("user/detail/",views.user_list_param,name="user_detail"),
+path("signup/",views.post_Usersignup,name="signup"),
 ]
