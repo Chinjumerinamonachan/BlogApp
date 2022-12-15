@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 USER = get_user_model()
 from myblog.models import Article,Comment
+from rest_framework.authentication import TokenAuthentication
 
 
 # @api_view(['POST'])
@@ -26,10 +27,16 @@ from myblog.models import Article,Comment
 #         user.username}
 #     })
 
+# users = USER.objects.all()
+# for user in users:
+#     token=Token.objects.get_or_create(user=user)
+#     print(token)
+
+
+
 # the api for login
 @api_view(['POST'])
-# @authentication_classes([]) 
-# @permission_classes([AllowAny,]) 
+
 def login_user(request):
     if request.method == 'POST':
         username = request.data.get('username')
@@ -59,9 +66,11 @@ def login_user(request):
 #the api for logout
 
 @api_view(['POST'])
-# @authentication_classes([]) 
-# @permission_classes([])
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
+
 def logout_user(request):
+   
     if request.method =='POST':
         username = request.data.get('username')
         check_user=USER.objects.filter(username=username).exists()
@@ -76,8 +85,8 @@ def logout_user(request):
 # the api for listing article
 
 @api_view(['GET'])
-# @authentication_classes([]) 
-# @permission_classes([])
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
 def article_list(request,id):
     if request.method == "GET":
         userid=USER.objects.get(pk=id)
@@ -90,8 +99,8 @@ def article_list(request,id):
 # the api for view comment 
 
 @api_view(['GET'])
-# @authentication_classes([]) 
-# @permission_classes([]) 
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
 def article_comment_and_like_list(request,id):
     if request.method == "GET":
         article_id=Article.objects.get(pk=id)
@@ -104,9 +113,8 @@ def article_comment_and_like_list(request,id):
 # the api for article/post creation
 
 @api_view(['POST'])
-# @authentication_classes([]) 
-# @permission_classes([]) 
-# @csrf_protect
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
 def article_create(request):
     if request.method == "POST":
         serializer = ArticleSerializer(data=request.data)
@@ -118,9 +126,8 @@ def article_create(request):
 #the api for article/post details
 
 @api_view(['PUT'])
-# @authentication_classes([]) 
-# @permission_classes([]) 
-# @csrf_protect
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
 def article_detail(request,id):
 
    if request.method == 'PUT':
@@ -132,8 +139,8 @@ def article_detail(request,id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
  
 @api_view(['POST'])
-# @authentication_classes([]) 
-# @permission_classes([])
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
 def user_post_param(request):
     if request.method =='POST':
         username=request.data.get('username')
@@ -141,11 +148,11 @@ def user_post_param(request):
         return Response({"success":"the typed username is","username":username},status=status.HTTP_200_OK)
         
 
-@api_view(['GET'])
-# @authentication_classes([]) 
-# @permission_classes([])
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication,])
+@permission_classes([IsAuthenticated,])
 def user_list_param(request):
-    if request.method =='GET':
+    if request.method =='POST':
         data={}
         username=request.data.get('username')
         print(username)

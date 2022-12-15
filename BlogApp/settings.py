@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     #localapps
     "user",
     "myblog",
-    'rest_framework',
     'blog_api',
-    # 'rest_framework.authtoken',
+    # third party apps
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +128,8 @@ REST_FRAMEWORK = {
 'DEFAULT_AUTHENTICATION_CLASSES': [
           'rest_framework.authentication.TokenAuthentication',
    ],
+
+
 
 }
 
