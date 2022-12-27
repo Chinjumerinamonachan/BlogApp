@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "user",
     "myblog",
     'blog_api',
+    'fedility_service',
     # third party apps
     'rest_framework',
     'rest_framework.authtoken',

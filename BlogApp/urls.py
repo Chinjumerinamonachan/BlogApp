@@ -27,6 +27,7 @@ urlpatterns = [
     path("",include("myblog.urls",namespace="myblog")),
     path('api-auth/', include('rest_framework.urls')),
     path("blog_api/",include("blog_api.urls",namespace="blog_api")),
+    # path("fedility_service/",include("fedility_service.urls",namespace="fedility_service")),
 
 ]
 
